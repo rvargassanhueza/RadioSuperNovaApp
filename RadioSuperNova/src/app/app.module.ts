@@ -12,6 +12,9 @@ import { AppRoutingModule } from './app-routing.module';
 import { Network } from '@ionic-native/network/ngx';
 import { Dialogs } from '@ionic-native/dialogs/ngx';
 
+import { Media, MediaObject } from '@ionic-native/media/ngx';
+import { MusicControls } from '@ionic-native/music-controls/ngx';
+
 
 @NgModule({
   declarations: [AppComponent],
@@ -20,6 +23,8 @@ import { Dialogs } from '@ionic-native/dialogs/ngx';
   providers: [
     StatusBar,
     SplashScreen,
+    Media,
+    MusicControls,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     Network,
     Dialogs
