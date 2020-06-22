@@ -4,8 +4,6 @@ import { Platform, AlertController } from '@ionic/angular';
 import { Network } from '@ionic-native/network/ngx';
 import { Dialogs } from '@ionic-native/dialogs/ngx';
 
-
-
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
@@ -14,6 +12,8 @@ import { Dialogs } from '@ionic-native/dialogs/ngx';
 export class HomePage  {
   audio: any;
   subscribe: any;
+  // contador: number = 0;
+
   constructor(
     public platform: Platform,
     public alertController: AlertController,
@@ -21,24 +21,24 @@ export class HomePage  {
     public dialogs: Dialogs
 
     ) {
-      this.subscribe = this.platform.backButton.subscribeWithPriority(666666,()=>{
-        if(this.constructor.name == "HomePage"){
-          this.confirmMessage();
-        }
+      this.subscribe = this.platform.backButton.subscribeWithPriority(10,()=>{
+        console.log("this.subscribe: ",this.subscribe);
+        this.confirmMessage();
+      });
+      
+      this.network.onDisconnect().subscribe(()=>{
+        this.dialogs.alert('Se ha desconectado de internet','Radio SuperNova');
+        this.exitApp();
       });
 
-      this.network.onDisconnect().subscribe(()=>{
-        this.dialogs.alert('Se ha desconectado de internet');
-        navigator["app"].exitApp();
-      });
+      if(this.network.type === 'none'){
+        
+        this.exitForInternet();}
 
       this.network.onConnect().subscribe(()=>{
         if(this.network.type !== 'wifi'){
-          this.dialogs.alert('estás conectado a través de tu internet móvil, si puedes cámbiate a wifi para no consumir tus datos');
+          this.dialogs.alert('estás conectado a través de tu internet móvil, si puedes cámbiate a wifi para no consumir tus datos', 'Radio SuperNova');
         }
-        setTimeout(()=>{
-          this.dialogs.alert('estás conectado a internet a través de '+this.network.type);
-        },2000)
       });
     }
 
@@ -47,8 +47,11 @@ export class HomePage  {
     const play = document.getElementById('play');
     const stop = document.getElementById('pause');
     const loader = document.getElementById('loader');
-
-    const audio = new Audio ('http://104.131.18.232/proxy/supernova?mp=/stream;');
+    const conect = this.network;
+    const dialog = this.dialogs;
+    const audio = new Audio();
+    audio.src = 'http://104.131.18.232/proxy/supernova?mp=/stream';
+    audio.load();
   
       play.style.display ="block";
       loader.style.display ="none";
@@ -74,16 +77,37 @@ export class HomePage  {
     });
   
     play.addEventListener('click', function(){
-      audio.play();
-      audio.loop = true;
+      if(conect.type === 'none'){
+          dialog.alert(
+            'Radio SuperNova',
+            'no estás conectado a internet', 
+          );
+          setTimeout(()=>{
+            navigator["app"].exitApp();
+          },2000)
+      }else{
+        audio.loop = true;
+        const data = audio.play();
+        data.then(function(i) {
+          // Automatic playback started!
+          console.log("reproduce i: "+i);
+        }).catch(function(error) {
+          console.log("reproduce error "+ error);
+          audio.play();
+          // Automatic playback failed.
+          // Show a UI element to let the user manually start playback.
+        });
+        // audio.loop = true;
         play.style.display = "none";
         stop.style.display = "block";
         loader.style.display = "none";
+      }
     });
   }
+
 async confirmMessage(){
+  
   const alert = await this.alertController.create({
-    cssClass: 'my-custom-class',
     header: 'Radio SuperNova',
     message: 'estás seguro que deseas salir de la app?',
     buttons: [
@@ -96,13 +120,33 @@ async confirmMessage(){
       }, {
         text: 'Acepto',
         handler: () => {
-          navigator["app"].exitApp();
+          this.exitApp();
         }
       }
     ]
   });
-
   await alert.present();
+}
+
+async exitForInternet(){
+  const alert = await this.alertController.create({
+    cssClass: 'my-custom-class',
+    header: 'Radio SuperNova',
+    message: 'no estás conectado a internet',
+    buttons: [
+       {
+        text: 'Acepto',
+        handler: () => {
+          this.exitApp();
+        }
+      }
+    ]
+  });
+  await alert.present();
+}
+
+exitApp(){
+  navigator["app"].exitApp();
 }
   ngOnDestroy() {
     
