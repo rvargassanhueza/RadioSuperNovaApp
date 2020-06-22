@@ -70,7 +70,7 @@ export class HomePage  {
     });
   
     stop.addEventListener('click', function(){
-      audio.pause();
+       audio.pause();
         play.style.display = "block";
         stop.style.display = "none";
         loader.style.display = "none";
@@ -90,17 +90,12 @@ export class HomePage  {
         const data = audio.play();
         data.then(function(i) {
           // Automatic playback started!
-          console.log("reproduce i: "+i);
+          play.style.display = "none";
+          stop.style.display = "block";
+          loader.style.display = "none";
         }).catch(function(error) {
           console.log("reproduce error "+ error);
-          audio.play();
-          // Automatic playback failed.
-          // Show a UI element to let the user manually start playback.
-        });
-        // audio.loop = true;
-        play.style.display = "none";
-        stop.style.display = "block";
-        loader.style.display = "none";
+        });        
       }
     });
   }
