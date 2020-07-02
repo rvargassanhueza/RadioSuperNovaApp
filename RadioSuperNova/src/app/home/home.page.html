@@ -33,25 +33,26 @@
           <ion-button expand="block" shape="round" fill="outline" href="https://www.who.int/es/emergencies/diseases/novel-coronavirus-2019/advice-for-public">Notas coronavirus</ion-button>
         </ion-col>
       </ion-row>
-      <ion-row style="position: absolute; bottom: 0; z-index: 1;">
-        <!-- <button ion-button (click)='playAudio()' >
-          <ion-icon [name]="isPlaying ? 'pause' : 'play' ">
-        </button> -->
+      <ion-row style="position: absolute; bottom: 0; z-index: 1; left: 50%; transform: translate(-50%, -5%);-webkit-transform: translate(-50%, -5%);">
           <ion-col>
               <a id="play" class="enlaces2">
                 <i class="icon-play2 control"></i>
               </a>
-          </ion-col>
-            <ion-col>
               <a id="pause" class="enlaces2">
                 <i class="icon-pause control"></i>
               </a>
+              <a id="loader" class="enlaces2">
+                <i class="spinner icon-spinner9 control"></i>
+              </a>
+          </ion-col>
+             <!-- <ion-col>
+              <div class="gifPlayer" id="gifPlayer"></div>
             </ion-col>
             <ion-col>
               <a id="loader" class="enlaces2">
                 <i class="spinner icon-spinner9 control"></i>
               </a>
-          </ion-col>
+          </ion-col>  -->
       </ion-row>
       <ion-row style="position: absolute; bottom: 0;" >
         <ion-col >

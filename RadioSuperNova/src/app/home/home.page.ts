@@ -51,7 +51,7 @@ export class HomePage  {
     const dialog = this.dialogs;
     const audio = new Audio();
     audio.src = 'http://104.131.18.232/proxy/supernova?mp=/stream';
-    audio.load();
+    // audio.load();
   
       play.style.display ="block";
       loader.style.display ="none";
@@ -86,8 +86,8 @@ export class HomePage  {
             navigator["app"].exitApp();
           },2000)
       }else{
-        audio.loop = true;
         const data = audio.play();
+        audio.loop = true;
         data.then(function(i) {
           // Automatic playback started!
           play.style.display = "none";
