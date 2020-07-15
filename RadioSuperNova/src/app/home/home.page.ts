@@ -42,20 +42,26 @@ export class HomePage  {
       });
     }
 
+    ionViewWillEnter(){
+      
+    }
   ngOnInit(){
 
+    const imgOndas = document.getElementById('cont-imagen-ondas');
     const play = document.getElementById('play');
     const stop = document.getElementById('pause');
     const loader = document.getElementById('loader');
     const conect = this.network;
     const dialog = this.dialogs;
     const audio = new Audio();
-    audio.src = 'http://104.131.18.232/proxy/supernova?mp=/stream';
-    // audio.load();
-  
+    const source = document.createElement('source');
+    source.setAttribute('src','http://104.131.18.232/proxy/supernova?mp=/stream')
+      audio.load();
+      audio.appendChild(source);
       play.style.display ="block";
       loader.style.display ="none";
       stop.style.display= "none";
+      imgOndas.style.display = "none";
   
       audio.addEventListener('playing',function(){
         loader.style.display ="none";
@@ -67,6 +73,8 @@ export class HomePage  {
       loader.style.display ="block";
       play.style.display="none";
       stop.style.display="none";
+      imgOndas.style.display = "none";
+  
     });
   
     stop.addEventListener('click', function(){
@@ -74,6 +82,8 @@ export class HomePage  {
         play.style.display = "block";
         stop.style.display = "none";
         loader.style.display = "none";
+        imgOndas.style.display = "none";
+
     });
   
     play.addEventListener('click', function(){
@@ -86,13 +96,15 @@ export class HomePage  {
             navigator["app"].exitApp();
           },2000)
       }else{
+        // audio.loop = true;
         const data = audio.play();
-        audio.loop = true;
         data.then(function(i) {
           // Automatic playback started!
           play.style.display = "none";
           stop.style.display = "block";
           loader.style.display = "none";
+          imgOndas.style.display = "block";
+
         }).catch(function(error) {
           console.log("reproduce error "+ error);
         });        
